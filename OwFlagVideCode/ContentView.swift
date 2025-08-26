@@ -6,56 +6,90 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @State private var showingRegistration = false
+    @State private var showingLogin = false
+    @StateObject private var supabaseManager = SupabaseManager.shared
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+        
+        NavigationView {
+            VStack {
+                Text("Vibe Coding")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding()
+                
+                VStack(spacing: 16) {
+                    Button("Registro de Usuario") {
+                        showingRegistration = true
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                    .padding(.horizontal)
+                    
+                    Button("Iniciar Sesión") {
+                        showingLogin = true
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.green)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                    .padding(.horizontal)
+                }
+                
+                if let currentUser = supabaseManager.getCurrentUser() {
+                    VStack {
+                        Text("Usuario Conectado")
+                            .font(.headline)
+                            .padding()
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Email: \(currentUser.email ?? "Sin email")")
+                                .font(.body)
+                            Text("ID: \(currentUser.id.uuidString)")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Text("Conectado desde: \(currentUser.createdAt, format: Date.FormatStyle(date: .numeric, time: .shortened))")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding()
+                        .background(Color.green.opacity(0.1))
+                        .cornerRadius(10)
+                        .padding(.horizontal)
+                        
+                        Button("Cerrar Sesión") {
+                            Task {
+                                try? await supabaseManager.signOut()
+                            }
+                        }
+                        .padding()
+                        .background(Color.red)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
                     }
                 }
-                .onDelete(perform: deleteItems)
+                
+                Spacer()
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
+            .navigationTitle("Inicio")
+            .sheet(isPresented: $showingRegistration) {
+                UserRegistrationView()
             }
-        } detail: {
-            Text("Select an item")
+            .sheet(isPresented: $showingLogin) {
+                LoginView()
+            }
         }
     }
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
-        }
-    }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }

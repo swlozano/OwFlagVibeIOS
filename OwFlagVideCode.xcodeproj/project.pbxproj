@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		AA74D9A02E5D601600A95A4B /* MapboxMaps in Frameworks */ = {isa = PBXBuildFile; productRef = AA74D99F2E5D601600A95A4B /* MapboxMaps */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		AA7006102E5D4BA70043AD26 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -29,9 +33,22 @@
 		AA7006192E5D4BA70043AD26 /* OwFlagVideCodeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OwFlagVideCodeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		AA70062D2E5D5A660043AD26 /* Exceptions for "OwFlagVideCode" folder in "OwFlagVideCode" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = AA7005FC2E5D4BA60043AD26 /* OwFlagVideCode */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		AA7005FF2E5D4BA60043AD26 /* OwFlagVideCode */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				AA70062D2E5D5A660043AD26 /* Exceptions for "OwFlagVideCode" folder in "OwFlagVideCode" target */,
+			);
 			path = OwFlagVideCode;
 			sourceTree = "<group>";
 		};
@@ -52,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA74D9A02E5D601600A95A4B /* MapboxMaps in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +96,7 @@
 				AA7005FF2E5D4BA60043AD26 /* OwFlagVideCode */,
 				AA7006122E5D4BA70043AD26 /* OwFlagVideCodeTests */,
 				AA70061C2E5D4BA70043AD26 /* OwFlagVideCodeUITests */,
+				AA74D99E2E5D601600A95A4B /* Frameworks */,
 				AA7005FE2E5D4BA60043AD26 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -90,6 +109,13 @@
 				AA7006192E5D4BA70043AD26 /* OwFlagVideCodeUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		AA74D99E2E5D601600A95A4B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,6 +138,7 @@
 			);
 			name = OwFlagVideCode;
 			packageProductDependencies = (
+				AA74D99F2E5D601600A95A4B /* MapboxMaps */,
 			);
 			productName = OwFlagVideCode;
 			productReference = AA7005FD2E5D4BA60043AD26 /* OwFlagVideCode.app */;
@@ -195,6 +222,10 @@
 			);
 			mainGroup = AA7005F42E5D4BA60043AD26;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				AA74D99D2E5D5F9700A95A4B /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */,
+				AA74D9A72E5E4ED600A95A4B /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = AA7005FE2E5D4BA60043AD26 /* Products */;
 			projectDirPath = "";
@@ -398,6 +429,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"OwFlagVideCode/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OwFlagVideCode/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -426,6 +458,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"OwFlagVideCode/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OwFlagVideCode/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -552,6 +585,33 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AA74D99D2E5D5F9700A95A4B /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mapbox/mapbox-maps-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.0.0;
+			};
+		};
+		AA74D9A72E5E4ED600A95A4B /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase-community/supabase-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AA74D99F2E5D601600A95A4B /* MapboxMaps */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA74D99D2E5D5F9700A95A4B /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */;
+			productName = MapboxMaps;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = AA7005F52E5D4BA60043AD26 /* Project object */;
 }
