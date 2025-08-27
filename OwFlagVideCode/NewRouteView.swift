@@ -10,17 +10,46 @@ import MapboxMaps
 import CoreLocation
 import SwiftData
 
+// MARK: - Point Data Model
+@Model
+final class RoutePoint: Identifiable {
+    var id: UUID
+    var name: String
+    var pointDescription: String
+    var latitude: Double
+    var longitude: Double
+    var createdAt: Date
+    var route: Route?
+    
+    init(name: String, description: String, latitude: Double, longitude: Double) {
+        self.id = UUID()
+        self.name = name
+        self.pointDescription = description
+        self.latitude = latitude
+        self.longitude = longitude
+        self.createdAt = Date()
+    }
+}
+
 // MARK: - Route Data Model
 @Model
 final class Route {
     var name: String
     var routeDescription: String
     var createdAt: Date
+    @Relationship(deleteRule: .cascade, inverse: \RoutePoint.route) var points: [RoutePoint] = []
     
     init(name: String, description: String) {
         self.name = name
         self.routeDescription = description
         self.createdAt = Date()
+        self.points = []
+    }
+}
+
+extension RoutePoint {
+    var coordinate: CLLocationCoordinate2D {
+        CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
 }
 
@@ -40,6 +69,8 @@ struct NewRouteView: View {
     @State private var showingRouteDialog = true
     @State private var routeName = ""
     @State private var routeDescription = ""
+    @State private var currentRoute: Route?
+    @State private var savedPoints: [RoutePoint] = []
     
     var body: some View {
         NavigationView {
@@ -67,21 +98,26 @@ struct NewRouteView: View {
                     }
                     .background(Color(.systemBackground))
                     
+                    
+                    
                     // Mapa de Mapbox con seguimiento de ubicación y marcador
                     MapReader { proxy in
                         Map(initialViewport: .camera(center: cameraOptions.center!, zoom: cameraOptions.zoom!)) {
                             // Marcador rojo para la posición del usuario
                             if let coordinate = userLocationCoordinate {
-                                /*PointAnnotation(id: "userLocation", coordinate: coordinate)
-                                    .iconColor(.red)
-                                    .iconSize(10)*/
-                                
                                 PointAnnotation(coordinate: coordinate)
                                     .image(.init(image: UIImage(named: "map_mark")!, name: "map_mark")).iconSize(0.2)
                             }
                             
-                            //let someCoordinate = CLLocationCoordinate2D(latitude: 40.7128, longitude: -74.0060)
-                              
+                            // Marcadores para puntos guardados
+                            ForEvery(savedPoints, id: \.persistentModelID) { point in
+                                
+                                PointAnnotation(coordinate: point.coordinate)
+                                    .image(.init(image: UIImage(named: "mpin")!, name: "mpin")).iconSize(0.2)
+                                
+                            }
+                            
+                            
                         }
                         .mapStyle(.standard)
                         .onReceive(locationManager.$currentLocation) { location in
@@ -173,7 +209,26 @@ struct NewRouteView: View {
                             .cornerRadius(10)
                             
                             Button("Guardar") {
-                                // TODO: Implementar lógica de guardado
+                                if !pointName.isEmpty, let route = currentRoute, let userLocation = userLocationCoordinate {
+                                    let newPoint = RoutePoint(
+                                        name: pointName,
+                                        description: pointDescription,
+                                        latitude: userLocation.latitude,
+                                        longitude: userLocation.longitude
+                                    )
+                                    newPoint.route = route
+                                    modelContext.insert(newPoint)
+                                    
+                                    // Agregar punto al estado para mostrarlo en el mapa
+                                    savedPoints.append(newPoint)
+                                    
+                                    do {
+                                        try modelContext.save()
+                                    } catch {
+                                        print("Error saving point: \(error)")
+                                    }
+                                }
+                                
                                 pointName = ""
                                 pointDescription = ""
                                 showingPointDialog = false
@@ -227,6 +282,7 @@ struct NewRouteView: View {
                                 if !routeName.isEmpty {
                                     let newRoute = Route(name: routeName, description: routeDescription)
                                     modelContext.insert(newRoute)
+                                    currentRoute = newRoute
                                     
                                     do {
                                         try modelContext.save()
@@ -237,6 +293,8 @@ struct NewRouteView: View {
                                     routeName = ""
                                     routeDescription = ""
                                     showingRouteDialog = false
+                                    
+                                    
                                 }
                             }
                             .frame(maxWidth: .infinity)
