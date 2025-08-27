@@ -37,7 +37,9 @@ struct RoutesView: View {
                         .padding(.bottom, 200) // Espacio para botones inferiores
                     } else {
                         List(routes) { route in
-                            RouteRowView(route: route)
+                            NavigationLink(destination: RouteView(route: route)) {
+                                RouteRowView(route: route)
+                            }
                         }
                         .listStyle(PlainListStyle())
                     }

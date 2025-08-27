@@ -31,6 +31,23 @@ final class RoutePoint: Identifiable {
     }
 }
 
+// MARK: - Location Point Data Model for Tracking
+@Model
+final class LocationPoint: Identifiable {
+    var id: UUID
+    var latitude: Double
+    var longitude: Double
+    var timestamp: Date
+    var route: Route?
+    
+    init(latitude: Double, longitude: Double) {
+        self.id = UUID()
+        self.latitude = latitude
+        self.longitude = longitude
+        self.timestamp = Date()
+    }
+}
+
 // MARK: - Route Data Model
 @Model
 final class Route {
@@ -38,16 +55,24 @@ final class Route {
     var routeDescription: String
     var createdAt: Date
     @Relationship(deleteRule: .cascade, inverse: \RoutePoint.route) var points: [RoutePoint] = []
+    @Relationship(deleteRule: .cascade, inverse: \LocationPoint.route) var locationPoints: [LocationPoint] = []
     
     init(name: String, description: String) {
         self.name = name
         self.routeDescription = description
         self.createdAt = Date()
         self.points = []
+        self.locationPoints = []
     }
 }
 
 extension RoutePoint {
+    var coordinate: CLLocationCoordinate2D {
+        CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
+}
+
+extension LocationPoint {
     var coordinate: CLLocationCoordinate2D {
         CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
@@ -71,6 +96,11 @@ struct NewRouteView: View {
     @State private var routeDescription = ""
     @State private var currentRoute: Route?
     @State private var savedPoints: [RoutePoint] = []
+    @State private var savedLocationPoints: [LocationPoint] = []
+    
+    // Estados para tracking de posición
+    @State private var isTracking = false
+    @State private var trackingTimer: Timer?
     
     var body: some View {
         NavigationView {
@@ -109,12 +139,17 @@ struct NewRouteView: View {
                                     .image(.init(image: UIImage(named: "map_mark")!, name: "map_mark")).iconSize(0.2)
                             }
                             
-                            // Marcadores para puntos guardados
+                            // Marcadores para puntos guardados (RoutePoints - azules)
                             ForEvery(savedPoints, id: \.persistentModelID) { point in
-                                
                                 PointAnnotation(coordinate: point.coordinate)
                                     .image(.init(image: UIImage(named: "mpin")!, name: "mpin")).iconSize(0.2)
-                                
+                            }
+                            
+                            // Marcadores para tracking de ubicación (LocationPoints - verdes)
+                            ForEvery(savedLocationPoints, id: \.persistentModelID) { locationPoint in
+                                PointAnnotation(coordinate: locationPoint.coordinate)
+                                    .iconColor(.green)
+                                    .iconSize(0.8)
                             }
                             
                             
@@ -174,6 +209,7 @@ struct NewRouteView: View {
                 locationManager.requestLocationPermission()
             }
             .onDisappear {
+                stopLocationTracking()
                 locationManager.stopLocationTracking()
             }
             .sheet(isPresented: $showingPointDialog) {
@@ -294,7 +330,8 @@ struct NewRouteView: View {
                                     routeDescription = ""
                                     showingRouteDialog = false
                                     
-                                    
+                                    // Iniciar tracking automático después de crear la ruta
+                                    startLocationTracking()
                                 }
                             }
                             .frame(maxWidth: .infinity)
@@ -311,6 +348,43 @@ struct NewRouteView: View {
                 .presentationDetents([.medium])
                 .interactiveDismissDisabled()
             }
+        }
+    }
+    
+    // MARK: - Location Tracking Functions
+    private func startLocationTracking() {
+        guard currentRoute != nil else { return }
+        
+        isTracking = true
+        trackingTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+            saveCurrentPosition()
+        }
+    }
+    
+    private func stopLocationTracking() {
+        isTracking = false
+        trackingTimer?.invalidate()
+        trackingTimer = nil
+    }
+    
+    private func saveCurrentPosition() {
+        guard let route = currentRoute, 
+              let location = userLocationCoordinate else { return }
+        
+        let locationPoint = LocationPoint(
+            latitude: location.latitude,
+            longitude: location.longitude
+        )
+        locationPoint.route = route
+        modelContext.insert(locationPoint)
+        
+        // Agregar al array para mostrar en mapa
+        savedLocationPoints.append(locationPoint)
+        
+        do {
+            try modelContext.save()
+        } catch {
+            print("Error saving location point: \(error)")
         }
     }
 }

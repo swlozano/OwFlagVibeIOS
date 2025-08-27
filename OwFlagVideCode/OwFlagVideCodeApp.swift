@@ -14,6 +14,6 @@ struct OwFlagVideCodeApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: [Route.self, RoutePoint.self])
+        .modelContainer(for: [Route.self, RoutePoint.self, LocationPoint.self])
     }
 }
