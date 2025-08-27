@@ -131,6 +131,11 @@ struct LoginView: View {
                     loggedInUser = session.user
                     loginSuccess = true
                     isLoading = false
+                    
+                    // Auto dismiss after successful login to trigger navigation
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        dismiss()
+                    }
                 }
             } catch {
                 DispatchQueue.main.async {

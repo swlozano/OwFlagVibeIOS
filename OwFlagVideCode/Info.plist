@@ -4,5 +4,9 @@
 <dict>
 	<key>MBXAccessToken</key>
 	<string>pk.eyJ1Ijoic3dsb3phbm8iLCJhIjoiY21kbnpsYnd6MG15NjJscTB2YjVlMDgzNyJ9.KZMQTUKeNVlLtL2eoRncNQ</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Esta aplicación necesita acceso a tu ubicación para mostrar tu posición en el mapa y crear rutas.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Esta aplicación necesita acceso a tu ubicación para rastrear rutas y mostrar tu posición en tiempo real.</string>
 </dict>
 </plist>
