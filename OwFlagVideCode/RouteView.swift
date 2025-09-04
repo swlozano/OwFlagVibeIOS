@@ -80,16 +80,65 @@ struct RouteView: View {
                 }
                 .mapStyle(.standard)
                 .onMapLoaded { _ in
+                    // Priorizar el primer LocationPoint si existe
+                    if let firstLocationPoint = route.locationPoints.sorted(by: { $0.timestamp < $1.timestamp }).first {
+                        let newCamera = CameraOptions(
+                            center: firstLocationPoint.coordinate,
+                            zoom: 15
+                        )
+                        proxy.camera?.ease(to: newCamera, duration: 1.0)
+                        return
+                    }
+                    
+                    // Si no hay LocationPoints, usar el primer RoutePoint
+                    if let firstRoutePoint = route.points.first {
+                        let newCamera = CameraOptions(
+                            center: firstRoutePoint.coordinate,
+                            zoom: 15
+                        )
+                        proxy.camera?.ease(to: newCamera, duration: 1.0)
+                        return
+                    }
+                    
+                    // Fallback: calcular centro de todos los puntos
+                    let allPoints = route.points.map { $0.coordinate } + route.locationPoints.map { $0.coordinate }
+                    
+                    guard allPoints.count > 1 else { return }
+                    
+                    let latitudes = allPoints.map { $0.latitude }
+                    let longitudes = allPoints.map { $0.longitude }
+                    
+                    let minLat = latitudes.min() ?? 0
+                    let maxLat = latitudes.max() ?? 0
+                    let minLon = longitudes.min() ?? 0
+                    let maxLon = longitudes.max() ?? 0
+                    
+                    let centerLat = (minLat + maxLat) / 2
+                    let centerLon = (minLon + maxLon) / 2
+                    
                     let newCamera = CameraOptions(
-                        center: CLLocationCoordinate2D(
-                            latitude: -13.1631,
-                            longitude: -72.5450
-                        ),
+                        center: CLLocationCoordinate2D(latitude: centerLat, longitude: centerLon),
                         zoom: 14
                     )
                     proxy.camera?.ease(to: newCamera, duration: 1.0)
                 }
             }
+            .padding(.bottom, 10)
+            
+            // Botón Publicar en la parte inferior
+            Button(action: {
+                // Acción para publicar la ruta
+            }) {
+                Text("Publicar")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(10)
+            }
+            .padding(.horizontal)
+            .padding(.bottom)
         }
         .navigationTitle("Ruta")
         .navigationBarTitleDisplayMode(.inline)
