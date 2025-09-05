@@ -74,7 +74,6 @@ struct AuthSession: Codable {
 
 class SupabaseManager: ObservableObject {
     static let shared = SupabaseManager()
-    
     private let baseURL = "https://xrhrzvsehumzahcdtzzt.supabase.co"
     private let apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhyaHJ6dnNlaHVtemFoY2R0enp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQzMzA3ODAsImV4cCI6MjA1OTkwNjc4MH0.TLkmvnntYekunucf7-s6H0Pchy-M39VLl83zeX2hbZo"
     
