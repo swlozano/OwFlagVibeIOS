@@ -9,14 +9,14 @@ import SwiftUI
 
 struct UserRegistrationView: View {
     @Environment(\.dismiss) private var dismiss
-    @StateObject private var supabaseManager = SupabaseManager.shared
+    @StateObject private var authService = AuthService.shared
     
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var confirmPassword: String = ""
     @State private var showAlert = false
     @State private var alertMessage = ""
-    @State private var isLoading = false
+    @State private var registrationSuccess = false
     
     var body: some View {
         NavigationView {
@@ -52,29 +52,39 @@ struct UserRegistrationView: View {
                 }
                 .padding(.horizontal, 20)
                 
-                Button(action: registerUser) {
-                    if isLoading {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                    } else {
-                        Text("Registrarse")
+                Button(action: {
+                    Task {
+                        await registerUser()
+                    }
+                }) {
+                    HStack {
+                        if authService.isLoading {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                .scaleEffect(0.8)
+                        }
+                        Text(authService.isLoading ? "Registrando..." : "Registrarse")
                             .fontWeight(.semibold)
                     }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(isFormValid ? Color.blue : Color.gray)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
                 }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(isFormValid ? Color.blue : Color.gray)
-                .foregroundColor(.white)
-                .cornerRadius(10)
                 .padding(.horizontal, 20)
-                .disabled(!isFormValid || isLoading)
+                .disabled(!isFormValid || authService.isLoading)
                 
                 Spacer()
             }
             .navigationTitle("Registro")
             .navigationBarTitleDisplayMode(.inline)
-            .alert("Mensaje", isPresented: $showAlert) {
-                Button("OK") { }
+            .alert("Resultado", isPresented: $showAlert) {
+                Button("OK") {
+                    if registrationSuccess {
+                        dismiss()
+                    }
+                }
             } message: {
                 Text(alertMessage)
             }
@@ -96,44 +106,35 @@ struct UserRegistrationView: View {
         return emailPred.evaluate(with: email)
     }
     
-    private func registerUser() {
+    private func registerUser() async {
         guard isFormValid else { return }
         
-        isLoading = true
-        
-        Task {
-            do {
-                let response = try await supabaseManager.signUp(email: email, password: password)
-                
-                DispatchQueue.main.async {
-                    if response.user != nil {
-                        alertMessage = "Usuario registrado exitosamente. Por favor verifica tu email."
-                        showAlert = true
-                        
-                        // Reset form after successful registration
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            email = ""
-                            password = ""
-                            confirmPassword = ""
-                            isLoading = false
-                        }
-                    } else {
-                        alertMessage = "Error en el registro. Inténtalo de nuevo."
-                        showAlert = true
-                        isLoading = false
-                    }
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    if error.localizedDescription.contains("User already registered") {
-                        alertMessage = "Ya existe un usuario registrado con este email"
-                    } else {
-                        alertMessage = "Error al registrar usuario: \(error.localizedDescription)"
-                    }
-                    showAlert = true
-                    isLoading = false
-                }
+        do {
+            let user = try await authService.signUp(email: email, password: password)
+            
+            // Registro exitoso
+            alertMessage = "¡Cuenta creada exitosamente! Bienvenido \(user.email ?? "")."
+            registrationSuccess = true
+            showAlert = true
+            
+            // Reset form
+            email = ""
+            password = ""
+            confirmPassword = ""
+            
+        } catch {
+            // Error en el registro
+            if error.localizedDescription.contains("User already registered") {
+                alertMessage = "Ya existe un usuario registrado con este email"
+            } else {
+                alertMessage = error.localizedDescription
             }
+            registrationSuccess = false
+            showAlert = true
         }
     }
+}
+
+#Preview {
+    UserRegistrationView()
 }
