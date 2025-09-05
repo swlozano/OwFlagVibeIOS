@@ -10,11 +10,11 @@ import SwiftUI
 struct ContentView: View {
     @State private var showingRegistration = false
     @State private var showingLogin = false
-    @StateObject private var supabaseManager = SupabaseManager.shared
+    @StateObject private var authService = AuthService.shared
 
     var body: some View {
         Group {
-            if supabaseManager.getCurrentUser() != nil {
+            if authService.isAuthenticated {
                 // Usuario autenticado - mostrar pantalla de rutas
                 RoutesView()
             } else {
@@ -60,11 +60,7 @@ struct ContentView: View {
                 }
             }
         }
-        .onReceive(supabaseManager.$currentUser) { user in
-            // Trigger view refresh when user authentication changes
-        }
     }
-
 }
 
 #Preview {
