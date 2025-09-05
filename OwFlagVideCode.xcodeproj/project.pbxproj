@@ -10,6 +10,8 @@
 		AA74D9A02E5D601600A95A4B /* MapboxMaps in Frameworks */ = {isa = PBXBuildFile; productRef = AA74D99F2E5D601600A95A4B /* MapboxMaps */; };
 		AA7F73762E6A49EF000AC6CB /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = AA7F73752E6A49EF000AC6CB /* Supabase */; };
 		AA7F739C2E6A906B000AC6CB /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = AA7F739B2E6A906B000AC6CB /* Auth */; };
+		AA7F73A22E6B39F1000AC6CB /* Secrets.Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = AA7F73A12E6B39F1000AC6CB /* Secrets.Debug.xcconfig */; };
+		AA7F73A42E6B39FC000AC6CB /* Secrets.Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = AA7F73A32E6B39FC000AC6CB /* Secrets.Release.xcconfig */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +35,8 @@
 		AA7005FD2E5D4BA60043AD26 /* OwFlagVideCode.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OwFlagVideCode.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA70060F2E5D4BA70043AD26 /* OwFlagVideCodeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OwFlagVideCodeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA7006192E5D4BA70043AD26 /* OwFlagVideCodeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OwFlagVideCodeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA7F73A12E6B39F1000AC6CB /* Secrets.Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.Debug.xcconfig; sourceTree = "<group>"; };
+		AA7F73A32E6B39FC000AC6CB /* Secrets.Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.Release.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -102,6 +106,8 @@
 				AA70061C2E5D4BA70043AD26 /* OwFlagVideCodeUITests */,
 				AA74D99E2E5D601600A95A4B /* Frameworks */,
 				AA7005FE2E5D4BA60043AD26 /* Products */,
+				AA7F73A12E6B39F1000AC6CB /* Secrets.Debug.xcconfig */,
+				AA7F73A32E6B39FC000AC6CB /* Secrets.Release.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -249,6 +255,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA7F73A22E6B39F1000AC6CB /* Secrets.Debug.xcconfig in Resources */,
+				AA7F73A42E6B39FC000AC6CB /* Secrets.Release.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,6 +316,7 @@
 /* Begin XCBuildConfiguration section */
 		AA7006212E5D4BA70043AD26 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AA7F73A12E6B39F1000AC6CB /* Secrets.Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -371,6 +380,7 @@
 		};
 		AA7006222E5D4BA70043AD26 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AA7F73A32E6B39FC000AC6CB /* Secrets.Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;

@@ -3,7 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>MBXAccessToken</key>
-	<string>pk.eyJ1Ijoic3dsb3phbm8iLCJhIjoiY21kbnpsYnd6MG15NjJscTB2YjVlMDgzNyJ9.KZMQTUKeNVlLtL2eoRncNQ</string>
+	<string>$(MBX_ACCESS_TOKEN)</string>
+	<key>SUPABASE_URL</key>
+	<string>$(SUPABASE_URL)</string>
+	<key>SUPABASE_ANON_KEY</key>
+	<string>$(SUPABASE_ANON_KEY)</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Esta aplicación necesita acceso a tu ubicación para mostrar tu posición en el mapa y crear rutas.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>

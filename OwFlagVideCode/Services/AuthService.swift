@@ -17,8 +17,8 @@ class AuthService: ObservableObject {
     @Published var isLoading = false
     
     private let supabase = SupabaseClient(
-        supabaseURL: URL(string: "https://xrhrzvsehumzahcdtzzt.supabase.co")!,
-        supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhyaHJ6dnNlaHVtemFoY2R0enp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQzMzA3ODAsImV4cCI6MjA1OTkwNjc4MH0.TLkmvnntYekunucf7-s6H0Pchy-M39VLl83zeX2hbZo"
+        supabaseURL: URL(string: Bundle.main.infoDictionary?["SUPABASE_URL"] as? String ?? "")!,
+        supabaseKey: Bundle.main.infoDictionary?["SUPABASE_ANON_KEY"] as? String ?? ""
     )
     
     private init() {
