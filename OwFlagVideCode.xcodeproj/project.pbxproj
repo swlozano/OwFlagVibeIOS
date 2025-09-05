@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AA74D9A02E5D601600A95A4B /* MapboxMaps in Frameworks */ = {isa = PBXBuildFile; productRef = AA74D99F2E5D601600A95A4B /* MapboxMaps */; };
+		AA7F73762E6A49EF000AC6CB /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = AA7F73752E6A49EF000AC6CB /* Supabase */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA7F73762E6A49EF000AC6CB /* Supabase in Frameworks */,
 				AA74D9A02E5D601600A95A4B /* MapboxMaps in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -139,6 +141,7 @@
 			name = OwFlagVideCode;
 			packageProductDependencies = (
 				AA74D99F2E5D601600A95A4B /* MapboxMaps */,
+				AA7F73752E6A49EF000AC6CB /* Supabase */,
 			);
 			productName = OwFlagVideCode;
 			productReference = AA7005FD2E5D4BA60043AD26 /* OwFlagVideCode.app */;
@@ -610,6 +613,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AA74D99D2E5D5F9700A95A4B /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */;
 			productName = MapboxMaps;
+		};
+		AA7F73752E6A49EF000AC6CB /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA74D9A72E5E4ED600A95A4B /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
