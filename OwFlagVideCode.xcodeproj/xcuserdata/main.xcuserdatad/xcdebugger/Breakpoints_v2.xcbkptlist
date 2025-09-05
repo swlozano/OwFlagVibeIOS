@@ -16,8 +16,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "194"
             endingLineNumber = "194"
-            landmarkName = "publishRoute()"
-            landmarkType = "7">
+            landmarkName = "RouteView"
+            landmarkType = "14">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -32,7 +32,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "191"
             endingLineNumber = "191"
-            landmarkName = "publishRoute()"
+            landmarkName = "centerMapOnRoute()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
